@@ -1,5 +1,5 @@
 import { useLazyQuery } from "@apollo/client";
-import { createStyles, Loader, Grid, Box, Text } from "@mantine/core";
+import { createStyles, Loader, Grid, Box, Text, Button, Flex } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { GET_USER, GET_REPOSITORY } from "../queries";
 
@@ -10,7 +10,7 @@ import Pagination from "./components/Pagination";
 import RepositoryCard from "./components/RepositoryCard";
 
 const useStyles = createStyles(() => ({
-  text: { display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100vw', height: '50vh' },
+  text: { display: 'flex', alignItems: 'center', width: '100vw', marginTop: 12, marginLeft: 36 },
   loading: { display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100vw', height: '50vh' }
 }));
 
@@ -74,7 +74,7 @@ export default function Home() {
 
           {repositoryError && repositoryName && (
             <Box className={classes.text}>
-              <Text size="xl">Repository not found</Text>
+              <Text size="md" color="red">Repository not found</Text>
             </Box>
           )}
 
@@ -89,9 +89,28 @@ export default function Home() {
                   <RepositoryCard repository={repositoryData.repository} />
                 </Grid.Col>
               </Grid>
+              <Flex justify="center" sx={{ margin: 36 }}>
+                <Button variant="light" onClick={() => {
+                  setRepositoryName('');
+                  getUser({
+                    variables: {
+                      login,
+                      first: 9,
+                      last: null,
+                      after: null,
+                      before: null,
+                      languagesLast2: 10,
+                      orderBy: {
+                        direction: "DESC",
+                        field: "CREATED_AT"
+                      }
+                    }
+                  })
+                }}>show all repositories</Button>
+              </Flex>
             </Box>
           ) : (
-            <Box sx={{ margin: 24 }}>
+            <Box sx={{ marginRight: 36, marginLeft: 36, marginTop: 24 }}>
               <RepositoriesList
                 user={data?.user}
                 repositoryName={repositoryName}

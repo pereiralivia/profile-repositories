@@ -20,9 +20,7 @@ interface RepositoriesListProps {
 const RepositoriesList = ({ user, repositoryName }: RepositoriesListProps) => {
   const { classes } = useStyles();
 
-  const repositories = repositoryName
-    ? user?.repositories.nodes.filter((repository: Repository) => repository.name.includes(repositoryName))
-    : user?.repositories.nodes
+  const repositories = user?.repositories.nodes
 
   return (
     <Box>
