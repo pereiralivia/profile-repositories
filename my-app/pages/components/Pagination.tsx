@@ -63,10 +63,10 @@ const Pagination = ({ getUser, login, user, page, setPage }: PaginationProps) =>
   }
 
   return (
-    <Flex justify="end" sx={{ padding: 24 }}>
+    <Flex justify="end" sx={{ paddingRight: 36, paddingLeft: 36, paddingTop: 24, paddingBottom: 24 }}>
       <Group>
         {user?.repositories?.totalCount && (
-          <Text>{startItem} - {endItem()} of {totalItems}</Text>
+          <Text size="sm">{startItem} - {endItem()} of {totalItems}</Text>
         )}
         <Button
           onClick={handleGoToPreviousPage}
