@@ -15,7 +15,11 @@ const RepositoriesList = ({ user }: RepositoriesListProps) => {
   return (
     <Box>
       <Grid>
-        {repositories?.map((repository: Repository) => <RepositoryCard key={repository.id} repository={repository} />)}
+        {repositories?.map((repository: Repository) => (
+          <Grid.Col md={4} key={repository.id} >
+            <RepositoryCard repository={repository} />
+          </Grid.Col>
+        ))}
       </Grid>
     </Box>
   )

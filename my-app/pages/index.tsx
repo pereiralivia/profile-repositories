@@ -87,7 +87,9 @@ export default function Home() {
           {repositoryData && (repositoryName === repositoryData?.repository.name) ? (
             <Box sx={{ margin: 24 }}>
               <Grid>
-                <RepositoryCard repository={repositoryData.repository} />
+                <Grid.Col md={4}>
+                  <RepositoryCard repository={repositoryData.repository} />
+                </Grid.Col >
               </Grid>
               <Flex justify="center" sx={{ margin: 36 }}>
                 <Button variant="light" onClick={() => {
