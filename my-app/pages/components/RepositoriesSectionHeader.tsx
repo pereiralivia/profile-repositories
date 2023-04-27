@@ -1,4 +1,4 @@
-import { Group, Title, Badge, TextInput, Button, Flex } from "@mantine/core";
+import { Group, Title, Badge, TextInput, Button, Flex, Notification } from "@mantine/core";
 import { User } from "../../types";
 import { ChangeEvent, Dispatch, SetStateAction, SyntheticEvent, useState } from "react";
 import { LazyQueryExecFunction, OperationVariables } from "@apollo/client";
@@ -8,15 +8,17 @@ interface RepositorySectionHeaderProps {
   repositoryName: string,
   setRepositoryName: Dispatch<SetStateAction<string>>,
   getRepository: LazyQueryExecFunction<any, OperationVariables>,
-  login: string
+  login: string,
+  setShowError: Dispatch<SetStateAction<boolean>>
 }
 
-const RepositorySectionHeader = ({ user, repositoryName, setRepositoryName, getRepository, login }: RepositorySectionHeaderProps) => {
+const RepositorySectionHeader = ({ user, repositoryName, setRepositoryName, getRepository, login, setShowError }: RepositorySectionHeaderProps) => {
   const [keyword, setKeyword] = useState('')
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setKeyword(e.target.value)
     setRepositoryName(e.target.value)
+
   }
 
   const handleFindRepository = () => {

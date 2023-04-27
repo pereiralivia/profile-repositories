@@ -58,6 +58,7 @@ query Repository($name: String!, $owner: String!, $first: Int) {
     description
     id
     viewerHasStarred
+    url
     languages(first: $first) {
       nodes {
         name

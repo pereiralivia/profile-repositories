@@ -1,5 +1,5 @@
 import { useLazyQuery } from "@apollo/client";
-import { createStyles, Loader, Grid, Box, Text, Button, Flex } from "@mantine/core";
+import { createStyles, Loader, Grid, Box, Text, Button, Flex, Notification } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { GET_USER, GET_REPOSITORY } from "../queries";
 
@@ -20,9 +20,10 @@ export default function Home() {
   const [login, setLogin] = useState('');
   const [repositoryName, setRepositoryName] = useState('');
   const [page, setPage] = useState(1);
+  const [showError, setShowError] = useState(false);
 
-  const [getUser, { data, error, loading }] = useLazyQuery(GET_USER);
-  const [getRepository, { data: repositoryData, error: repositoryError, loading: repositoryLoading }] = useLazyQuery(GET_REPOSITORY);
+  const [getUser, { data, error, loading }] = useLazyQuery(GET_USER, { onError: () => setShowError(true) });
+  const [getRepository, { data: repositoryData, error: repositoryError, loading: repositoryLoading }] = useLazyQuery(GET_REPOSITORY, { onError: () => setShowError(true) });
 
   useEffect(() => {
     getUser({
@@ -44,6 +45,7 @@ export default function Home() {
 
   return (
     <>
+
       <Hero
         login={login}
         setLogin={setLogin}
@@ -51,9 +53,9 @@ export default function Home() {
         setPage={setPage}
       />
 
-      {error && (
+      {error && showError && (
         <Box className={classes.text}>
-          <Text size="xl">Profile not found</Text>
+          <Notification sx={{ position: 'absolute', top: 5, right: 5 }} onClick={() => setShowError(false)}>Profile not found</Notification>
         </Box>
       )}
 
@@ -70,12 +72,12 @@ export default function Home() {
             repositoryName={repositoryName}
             setRepositoryName={setRepositoryName}
             getRepository={getRepository}
-            login={login} />
+            login={login}
+            setShowError={setShowError}
+          />
 
-          {repositoryError && repositoryName && (
-            <Box className={classes.text}>
-              <Text size="md" color="red">Repository not found</Text>
-            </Box>
+          {repositoryError && showError && (
+            <Notification sx={{ position: 'absolute', top: 5, right: 5 }} onClick={() => setShowError(false)}>Repository not found</Notification>
           )}
 
           {repositoryLoading && (
@@ -85,9 +87,7 @@ export default function Home() {
           {repositoryData && (repositoryName === repositoryData?.repository.name) ? (
             <Box sx={{ margin: 24 }}>
               <Grid>
-                <Grid.Col md={4}>
-                  <RepositoryCard repository={repositoryData.repository} />
-                </Grid.Col>
+                <RepositoryCard repository={repositoryData.repository} />
               </Grid>
               <Flex justify="center" sx={{ margin: 36 }}>
                 <Button variant="light" onClick={() => {
