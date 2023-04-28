@@ -7,7 +7,7 @@ const httpLink = createHttpLink({
 
 
 const authLink = setContext((_, { headers }) => {
-  const token = process.env.NEXT_PUBLIC_TOKEN
+  const token = process.env.TOKEN
 
   return {
     headers: {
