@@ -16,6 +16,8 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
 
   const handleGetUser = async (login: string) => {
+    setUser(null)
+
     if (!login) return;
 
     setLoading(true)
@@ -62,7 +64,11 @@ export default function Home() {
 
       <Hero onClick={handleGetUser} />
 
-      {loading && <Loader />}
+      {loading && (
+        <Flex sx={{ width: '100vw', height: '60vh', justifyContent: 'center', alignItems: 'center' }}>
+          <Loader />
+        </Flex>
+      )}
 
       {user && (
         <Box>
