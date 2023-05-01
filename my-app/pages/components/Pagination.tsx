@@ -1,53 +1,14 @@
-import { LazyQueryExecFunction, OperationVariables } from "@apollo/client";
 import { Group, Button, Text, Flex } from "@mantine/core"
-import { Dispatch, SetStateAction } from "react";
 import { User } from "../../types";
 
 interface PaginationProps {
-  getUser: LazyQueryExecFunction<any, OperationVariables>
-  login: string,
+  user: User,
   page: number,
-  user: User
-  setPage: Dispatch<SetStateAction<number>>
+  onPreviousPageClick: (login: string, before: string) => Promise<void>,
+  onNextPageClick: (login: string, before: string) => Promise<void>
 }
 
-const Pagination = ({ getUser, login, user, page, setPage }: PaginationProps) => {
-
-  const handleGoToNextPage = () => {
-    getUser({
-      variables: {
-        login,
-        last: null,
-        first: 9,
-        after: user?.repositories.pageInfo.endCursor,
-        before: null,
-        languagesLast2: 10,
-        orderBy: {
-          direction: "DESC",
-          field: "CREATED_AT"
-        }
-      }
-    });
-    setPage(page + 1);
-  }
-
-  const handleGoToPreviousPage = () => {
-    getUser({
-      variables: {
-        login,
-        first: 9,
-        last: null,
-        after: null,
-        before: user?.repositories.pageInfo.endCursor,
-        languagesLast2: 10,
-        orderBy: {
-          direction: "DESC",
-          field: "CREATED_AT"
-        }
-      }
-    })
-    setPage(page - 1)
-  }
+const Pagination = ({ user, page, onPreviousPageClick, onNextPageClick }: PaginationProps) => {
   const totalItems = Number(user?.repositories?.totalCount)
   const totalPages = Math.ceil(totalItems / 9)
   const startItem = page === 1 ? 1 : ((page - 1) * 9) + 1;
@@ -69,13 +30,13 @@ const Pagination = ({ getUser, login, user, page, setPage }: PaginationProps) =>
           <Text size="sm">{startItem} - {endItem()} of {totalItems}</Text>
         )}
         <Button
-          onClick={handleGoToPreviousPage}
+          onClick={() => onPreviousPageClick(user.login, user.repositories.pageInfo.endCursor)}
           disabled={page === 1}
         >
           Previous
         </Button>
         <Button
-          onClick={handleGoToNextPage}
+          onClick={() => onNextPageClick(user.login, user.repositories.pageInfo.endCursor)}
           disabled={page === totalPages}>
           Next
         </Button>

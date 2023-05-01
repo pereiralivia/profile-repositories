@@ -1,7 +1,7 @@
 import { LazyQueryExecFunction, OperationVariables } from "@apollo/client";
 import { createStyles, rem, Flex, Group, TextInput, Button, Title } from "@mantine/core";
 import { GithubIcon } from "@mantine/ds";
-import { Dispatch, SetStateAction, useState } from "react";
+import { useState } from "react";
 
 const useStyles = createStyles((theme) => ({
   hero: {
@@ -19,25 +19,18 @@ const useStyles = createStyles((theme) => ({
     '@media (max-width: 40em)': {
       width: '80vw'
     },
-
   }
 }));
 
 interface HeroProps {
-  login: string,
-  setLogin: Dispatch<SetStateAction<string>>
-  getUser: LazyQueryExecFunction<any, OperationVariables>
-  setPage: Dispatch<SetStateAction<number>>,
+  onClick: (login: string) => Promise<void>
 }
 
-const Hero = ({ login, setLogin, getUser, setPage }: HeroProps) => {
+const Hero = ({ onClick }: HeroProps) => {
   const { classes } = useStyles();
   const [keyword, setKeyword] = useState('')
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setKeyword(e.target.value);
-    setLogin(e.target.value);
-  }
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => setKeyword(e.target.value);
 
   return (
     <Flex direction="column" justify="center" gap="md" className={classes.hero}>
@@ -50,24 +43,7 @@ const Hero = ({ login, setLogin, getUser, setPage }: HeroProps) => {
       </Flex>
       <Flex className={classes.inputSection}>
         <TextInput value={keyword} onChange={handleChange} placeholder="Github username" sx={{ width: '100%' }} />
-        <Button onClick={() => {
-          getUser({
-            variables: {
-              login,
-              first: 9,
-              last: null,
-              after: null,
-              before: null,
-              languagesLast2: 10,
-              orderBy: {
-                direction: "DESC",
-                field: "CREATED_AT"
-              }
-            }
-          })
-          setKeyword('');
-          setPage(1);
-        }}>Find</Button>
+        <Button onClick={() => onClick(keyword)}>Find</Button>
       </Flex>
     </Flex>
 

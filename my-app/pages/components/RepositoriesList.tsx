@@ -1,12 +1,10 @@
-import { createStyles, Box, Grid, Card, Flex, Group, Text, Badge, ColorSwatch, Notification } from '@mantine/core'
-import StarActionIcon from './StarActionIcon'
+import { Box, Grid } from '@mantine/core'
 import { Repository, User } from '../../types'
 import RepositoryCard from './RepositoryCard';
 import GoToGithubActionIcon from './GoToGithubActionIcon';
 
 interface RepositoriesListProps {
   user: User,
-  repositoryName: string
 }
 
 const RepositoriesList = ({ user }: RepositoriesListProps) => {

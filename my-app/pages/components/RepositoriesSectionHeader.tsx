@@ -1,38 +1,17 @@
-import { Group, Title, Badge, TextInput, Button, Flex, Notification } from "@mantine/core";
+import { useState } from "react";
+import { Title, Badge, TextInput, Button, Flex } from "@mantine/core";
 import { User } from "../../types";
-import { ChangeEvent, Dispatch, SetStateAction, SyntheticEvent, useState } from "react";
-import { LazyQueryExecFunction, OperationVariables } from "@apollo/client";
 
 interface RepositorySectionHeaderProps {
-  user: User,
-  repositoryName: string,
-  setRepositoryName: Dispatch<SetStateAction<string>>,
-  getRepository: LazyQueryExecFunction<any, OperationVariables>,
-  login: string,
-  setShowError: Dispatch<SetStateAction<boolean>>
+  user: User | null
+  onClick: (owner: string | undefined, repositoryName: string) => Promise<void>
 }
 
-const RepositorySectionHeader = ({ user, repositoryName, setRepositoryName, getRepository, login, setShowError }: RepositorySectionHeaderProps) => {
+const RepositorySectionHeader = ({ user, onClick }: RepositorySectionHeaderProps) => {
   const [keyword, setKeyword] = useState('')
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setKeyword(e.target.value)
-    setRepositoryName(e.target.value)
-
-  }
-
-  const handleFindRepository = () => {
-    if (!repositoryName) return;
-
-    getRepository({
-      variables: {
-        owner: login,
-        name: repositoryName,
-        first: 10
-      }
-    })
-
-    setKeyword('');
   }
 
   return (
@@ -43,7 +22,7 @@ const RepositorySectionHeader = ({ user, repositoryName, setRepositoryName, getR
       </Flex>
       <Flex align="center" sx={{ width: '100%', gap: 5 }}>
         <TextInput value={keyword} onChange={handleChange} placeholder="Repository name" sx={{ width: '100%' }} />
-        <Button onClick={handleFindRepository}>Find</Button>
+        <Button onClick={() => { onClick(user?.login, keyword); setKeyword('') }}>Find</Button>
       </Flex>
     </Flex>
 

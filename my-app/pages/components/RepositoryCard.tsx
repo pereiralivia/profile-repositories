@@ -1,6 +1,6 @@
 import { createStyles, Card, Badge, Flex, Group, Text, ColorSwatch, Grid } from "@mantine/core";
-import StarActionIcon from "./StarActionIcon";
 import { Repository } from "../../types";
+import StarActionIcon from "./StarActionIcon";
 import GoToGithubActionIcon from "./GoToGithubActionIcon";
 
 const useStyles = createStyles(() => ({
