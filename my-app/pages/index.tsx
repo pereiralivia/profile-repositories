@@ -16,11 +16,13 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
 
   const handleGetUser = async (login: string) => {
-    setUser(null)
-
     if (!login) return;
 
+    setUser(null)
+    setPage(1)
+    setError('')
     setLoading(true)
+
     const { user, error } = await getUser(login)
     setLoading(false)
 
